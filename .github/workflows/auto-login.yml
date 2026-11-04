@@ -1,5 +1,6 @@
 name: 自动扫码登录
 
+# 触发标记: run-2 (16:35)
 # 说明：本机 api.github.com 不可达，无法用 workflow_dispatch API 触发，
 # 故改为 push 本文件即触发一次扫码登录流程。
 on:
