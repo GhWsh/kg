@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>酷狗音乐扫码登录</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:#0d1117;color:#e6edf3;display:flex;flex-direction:column;
+  align-items:center;min-height:100vh;padding:20px;
+}
+.header{text-align:center;margin-bottom:30px}
+.header h1{font-size:24px;color:#58a6ff}
+.header p{color:#8b949e;font-size:14px;margin-top:8px}
+.cards{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;width:100%;max-width:960px}
+.card{
+  background:#161b22;border:1px solid #30363d;border-radius:16px;
+  padding:28px 20px;text-align:center;width:320px;
+}
+.card h2{font-size:16px;color:#e6edf3;margin-bottom:16px}
+.qrcode img{
+  width:280px;height:auto;border-radius:12px;
+  border:3px solid #30363d;background:#fff;padding:12px;
+}
+.url{margin-top:14px;word-break:break-all;font-size:13px;color:#8b949e}
+.tip{margin-top:8px;color:#f0883e;font-size:13px;font-weight:600}
+.footer{margin-top:40px;color:#484f58;font-size:12px}
+@media(max-width:400px){
+  .card{width:100%;padding:20px 12px}
+  .qrcode img{width:240px}
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🎵 酷狗音乐扫码登录</h1>
+  <p>使用「酷狗音乐 APP」扫描下方二维码完成登录</p>
+</div>
+<div class="cards">
+    <div class="card">
+      <h2>账号 1/1 </h2>
+      <div class="qrcode">
+        <img src="data:image/png;base64,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" alt="账号1 二维码" />
+      </div>
+      <p class="url"><code>https://h5.kugou.com/apps/loginQRCode/html/index.html?qrcode=0e0f855bbb3e701aa4e40480217218c21001</code></p>
+      <p class="tip">⏳ 有效期约 2 分钟</p>
+    </div>
+  </div>
+<p class="footer">此页面由 kgcheckin 自动生成 · 二维码有效期约 2 分钟 · 请尽快扫描</p>
+</body>
+</html>
