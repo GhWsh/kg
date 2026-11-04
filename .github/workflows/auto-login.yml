@@ -1,0 +1,66 @@
+name: 自动扫码登录
+
+# 说明：本机 api.github.com 不可达，无法用 workflow_dispatch API 触发，
+# 故改为 push 本文件即触发一次扫码登录流程。
+on:
+  push:
+    paths:
+      - '.github/workflows/auto-login.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  login:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 创建 Node 环境
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+          cache-dependency-path: ./api/package-lock.json
+
+      - name: 安装依赖
+        run: npm run install
+
+      - name: 生成二维码
+        run: node qrcodeLogin.js gen
+        env:
+          NUMBER: '1'
+
+      - name: 发布二维码到 qr-live 分支
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          cd /tmp
+          git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" qpush
+          cd qpush
+          git checkout --orphan qr-live
+          git rm -rf . -q || true
+          cp "$GITHUB_WORKSPACE"/qr/*.png .
+          cp "$GITHUB_WORKSPACE"/qr/login.html .
+          git add -A
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit -m "qr for run ${GITHUB_RUN_ID}"
+          git push -f origin qr-live
+          {
+            echo "## 二维码已就绪"
+            echo ""
+            echo "二维码已推送到 \`qr-live\` 分支，请尽快扫码（约 2 分钟有效）。"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 等待扫码登录
+        run: node qrcodeLogin.js wait
+        env:
+          USERINFO: ${{ secrets.USERINFO }}
+          APPEND_USER: '否'
+          ALLOW_PRINT_USERINFO: '是'
+          PAT: ${{ secrets.PAT }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
