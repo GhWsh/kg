@@ -1,8 +1,16 @@
 name: 签到
 on:
   workflow_dispatch:
+  # 修改本文件即触发一次签到（用于定时任务被 GitHub 丢弃时手动补跑）
+  push:
+    paths:
+      - '.github/workflows/签到.yml'
   schedule:
+    # 主时间点：UTC 17:10 = 北京 01:10
     - cron: '10 17 * * *'
+    # 备用时间点：UTC 22:10 = 北京 06:10，主时间点被排队丢弃时兜底
+    # 重复执行无副作用：已领过会返回「今日已领取」并秒退
+    - cron: '10 22 * * *'
 permissions:
   contents: read
 jobs:
